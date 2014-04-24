@@ -1,4 +1,4 @@
-ixoxo NHibernate
+ixoxo NHibernate [![Build status](https://ci.appveyor.com/api/projects/status/gwx6n2keo4r4tw5x)](https://ci.appveyor.com/project/nicbell/ixoxonhibernate)
 ===============
 
 This solution provides.
