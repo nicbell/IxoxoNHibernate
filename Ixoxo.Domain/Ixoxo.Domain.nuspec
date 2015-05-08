@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Ixoxo.Domain</id>
+    <version>1.0.0</version>
+    <title>Ixoxo.Domain</title>
+    <authors>Nic Bell</authors>
+    <projectUrl>https://github.com/nicbell/IxoxoNHibernate</projectUrl>
+    <iconUrl>http://nicbell.net/favicon-196x196.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Base domain object and IRepository interface</description>
+    <copyright>Nic Bell</copyright>
+    <language>en-GB</language>
+    <tags>Domain</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>
