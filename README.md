@@ -15,7 +15,7 @@ To be used with your NHibernate implementation.
 * Base fluent NHibernate mapping.
 * NHibernate web session module.
 
-## Available to on Nuget: 
+## Available to on Nuget
 ```
 PM> Install-Package Ixoxo.Domain
 ```
