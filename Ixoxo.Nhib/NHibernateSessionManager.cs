@@ -1,11 +1,12 @@
-﻿using System;
-using System.Web;
-using FluentNHibernate.Cfg;
+﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using NHibernate.Caches.SysCache2;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
+using System;
+using System.Reflection;
+using System.Web;
 
 namespace Ixoxo.Nhib
 {
@@ -86,11 +87,11 @@ namespace Ixoxo.Nhib
         /// <summary>
         /// Creates the database from mapping in this assembly
         /// </summary>
-        public static void CreateSchemaFromMappings()
+        public static void CreateSchemaFromMappings(Assembly assembly)
         {
             var config = Fluently.Configure()
                 .Database(DatabaseConfig)
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHibernateSessionManager>());
+                .Mappings(m => m.FluentMappings.AddFromAssembly(assembly));
 
             new SchemaExport(config.BuildConfiguration()).Create(false, true);
         }
