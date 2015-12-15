@@ -1,10 +1,13 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using Ixoxo.Nhib.Mapping;
 using NHibernate;
 using NHibernate.Caches.SysCache2;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 
@@ -17,19 +20,22 @@ namespace Ixoxo.Nhib
     {
         private static ISessionFactory Factory { get; set; }
 
-        public static IPersistenceConfigurer DatabaseConfig { get; set; }
+        /// <summary>
+        /// Eg: Config = Fluently.Configure()
+        ///    .Database(MsSqlConfiguration.MsSql2008.ShowSql().ConnectionString(c => c.Is("xxx"))
+        ///    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHibernateSessionManager>());
+        /// </summary>
+        public static FluentConfiguration Config { get; set; }
 
 
         private static ISessionFactory GetFactory<T>() where T : ICurrentSessionContext
         {
-            if (DatabaseConfig == null)
+            if (Config == null)
             {
-                throw new Exception("Database not configured. Please set NHibernateSessionManager.DatabaseConfig");
+                throw new Exception("Config not set. Please set NHibernateSessionManager.Config");
             }
 
-            return Fluently.Configure()
-                .Database(DatabaseConfig)
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHibernateSessionManager>())
+            return Config
                 .Cache(c => c.ProviderClass<SysCacheProvider>().UseQueryCache())
                 .CurrentSessionContext<T>().BuildSessionFactory();
         }
@@ -87,13 +93,14 @@ namespace Ixoxo.Nhib
         /// <summary>
         /// Creates the database from mapping in this assembly
         /// </summary>
-        public static void CreateSchemaFromMappings(Assembly assembly)
+        public static void CreateSchemaFromMappings()
         {
-            var config = Fluently.Configure()
-                .Database(DatabaseConfig)
-                .Mappings(m => m.FluentMappings.AddFromAssembly(assembly));
+            if (Config == null)
+            {
+                throw new Exception("Config not set. Please set NHibernateSessionManager.Config");
+            }
 
-            new SchemaExport(config.BuildConfiguration()).Create(false, true);
+            new SchemaExport(Config.BuildConfiguration()).Create(false, true);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using FluentNHibernate.Cfg.Db;
+﻿using FluentNHibernate.Cfg;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,17 +14,18 @@ namespace Ixoxo.Nhib
     /// </summary>
     public abstract class NHibernateWebSessionModule : IHttpModule
     {
-        public abstract IPersistenceConfigurer DatabaseConfig { get; }
+        public abstract FluentConfiguration Config { get; }
 
         public void Init(HttpApplication context)
         {
-            NHibernateSessionManager.DatabaseConfig = DatabaseConfig;
+            NHibernateSessionManager.Config = Config;
             context.EndRequest += (sender, e) => NHibernateSessionManager.CloseSession();
         }
 
 
         public void Dispose()
         {
+            NHibernateSessionManager.CloseSession();
         }
     }
 }
