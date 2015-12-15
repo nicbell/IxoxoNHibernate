@@ -16,23 +16,18 @@ namespace Ixoxo.Nhib
     {
         private static ISessionFactory Factory { get; set; }
 
-        public static string ConnectionString { get; set; }
-
-
-        static NHibernateSessionManager()
-        {
-            ConnectionString = String.Empty;
-        }
+        public static IPersistenceConfigurer DatabaseConfig { get; set; }
 
 
         private static ISessionFactory GetFactory<T>() where T : ICurrentSessionContext
         {
+            if (DatabaseConfig == null)
+            {
+                throw new Exception("Database not configured. Please set NHibernateSessionManager.DatabaseConfig");
+            }
+
             return Fluently.Configure()
-                .Database(MsSqlConfiguration.MsSql2008
-#if DEBUG
-                .ShowSql()
-#endif
-                .ConnectionString(c => c.Is(ConnectionString)))
+                .Database(DatabaseConfig)
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHibernateSessionManager>())
                 .Cache(c => c.ProviderClass<SysCacheProvider>().UseQueryCache())
                 .CurrentSessionContext<T>().BuildSessionFactory();
@@ -94,9 +89,7 @@ namespace Ixoxo.Nhib
         public static void CreateSchemaFromMappings()
         {
             var config = Fluently.Configure()
-                .Database(MsSqlConfiguration.MsSql2008
-                .ShowSql()
-                .ConnectionString(c => c.Is(ConnectionString)))
+                .Database(DatabaseConfig)
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHibernateSessionManager>());
 
             new SchemaExport(config.BuildConfiguration()).Create(false, true);

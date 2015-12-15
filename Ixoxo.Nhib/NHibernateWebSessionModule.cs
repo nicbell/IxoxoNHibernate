@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentNHibernate.Cfg.Db;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -7,11 +8,17 @@ using System.Web;
 
 namespace Ixoxo.Nhib
 {
-    public class NHibernateWebSessionModule : IHttpModule
+    /// <summary>
+    /// NHibernate web session module, this is abstract because it needs implementing 
+    /// with database configuration.
+    /// </summary>
+    public abstract class NHibernateWebSessionModule : IHttpModule
     {
+        public abstract IPersistenceConfigurer DatabaseConfig { get; }
+
         public void Init(HttpApplication context)
         {
-            NHibernateSessionManager.ConnectionString = ConfigurationManager.ConnectionStrings[0].ConnectionString;
+            NHibernateSessionManager.DatabaseConfig = DatabaseConfig;
             context.EndRequest += (sender, e) => NHibernateSessionManager.CloseSession();
         }
 
