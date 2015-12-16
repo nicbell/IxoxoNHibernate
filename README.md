@@ -21,3 +21,15 @@ PM> Install-Package Ixoxo.Domain
 ```
 PM> Install-Package Ixoxo.Nhib
 ```
+
+## Usage
+Before you get started you will need to configure the session manager.
+```cs
+NHibernateSessionManager.configure(Fluently.Configure()
+    .Database(MsSqlConfiguration.MsSql2008
+#if DEBUG
+    .ShowSql()
+#endif
+    .ConnectionString(c => c.Is(ConnectionString)))
+    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Example>()));
+```
