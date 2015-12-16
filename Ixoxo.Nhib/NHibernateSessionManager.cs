@@ -18,55 +18,74 @@ namespace Ixoxo.Nhib
     /// </summary>
     public class NHibernateSessionManager
     {
-        private static ISessionFactory Factory { get; set; }
+        private static ISessionFactory SessionFactory { get; set; }
 
-        /// <summary>
-        /// Eg: Config = Fluently.Configure()
-        ///    .Database(MsSqlConfiguration.MsSql2008.ShowSql().ConnectionString(c => c.Is("xxx"))
-        ///    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHibernateSessionManager>());
-        /// </summary>
-        public static FluentConfiguration Config { get; set; }
+        private static FluentConfiguration FluentConfig { get; set; }
 
 
         private static ISessionFactory GetFactory<T>() where T : ICurrentSessionContext
         {
-            if (Config == null)
-            {
-                throw new Exception("Config not set. Please set NHibernateSessionManager.Config");
-            }
-
-            return Config
+            return FluentConfig
                 .Cache(c => c.ProviderClass<SysCacheProvider>().UseQueryCache())
                 .CurrentSessionContext<T>().BuildSessionFactory();
         }
 
 
         /// <summary>
-        /// Gets the current session.
+        /// Configure NHibernate session manager
         /// </summary>
-        public static ISession GetCurrentSession()
+        /// <param name="config"></param>
+        /// <param name="app"></param>
+        public static void Configure(FluentConfiguration config)
         {
-            if (Factory == null)
-                Factory = HttpContext.Current != null ? GetFactory<WebSessionContext>() : GetFactory<ThreadStaticSessionContext>();
+            FluentConfig = config;
 
-            if (CurrentSessionContext.HasBind(Factory))
-                return Factory.GetCurrentSession();
-
-            var session = Factory.OpenSession();
-            CurrentSessionContext.Bind(session);
-
-            return session;
+            if (HttpContext.Current != null)
+            {
+                HttpContext.Current.ApplicationInstance.EndRequest += delegate
+                {
+                    CloseSession();
+                };
+            }
         }
 
 
         /// <summary>
-        /// Closes the session.
+        /// Gets the current session or opens a new session
+        /// </summary>        
+        public static ISession GetCurrentSession()
+        {
+            // Check that we have config
+            if (FluentConfig == null)
+            {
+                throw new Exception("Please configure NHibernateSessionManager");
+            }
+
+            // Create a SessionFactory if needed
+            if (SessionFactory == null)
+            {
+                SessionFactory = HttpContext.Current != null ? GetFactory<WebSessionContext>() : GetFactory<ThreadStaticSessionContext>();
+            }
+
+            // Open a session if needed
+            if (!CurrentSessionContext.HasBind(SessionFactory))
+            {
+                var session = SessionFactory.OpenSession();
+                CurrentSessionContext.Bind(session);
+            }
+
+            return SessionFactory.GetCurrentSession();
+        }
+
+
+        /// <summary>
+        /// Closes the current session.
         /// </summary>
         public static void CloseSession()
         {
-            if (Factory != null && CurrentSessionContext.HasBind(Factory))
+            if (SessionFactory != null && CurrentSessionContext.HasBind(SessionFactory))
             {
-                var session = CurrentSessionContext.Unbind(Factory);
+                var session = CurrentSessionContext.Unbind(SessionFactory);
                 session.Close();
             }
         }
@@ -95,12 +114,12 @@ namespace Ixoxo.Nhib
         /// </summary>
         public static void CreateSchemaFromMappings()
         {
-            if (Config == null)
+            if (FluentConfig == null)
             {
-                throw new Exception("Config not set. Please set NHibernateSessionManager.Config");
+                throw new Exception("Please configure NHibernateSessionManager");
             }
 
-            new SchemaExport(Config.BuildConfiguration()).Create(false, true);
+            new SchemaExport(FluentConfig.BuildConfiguration()).Create(false, true);
         }
     }
 }

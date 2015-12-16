@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Ixoxo.Nhib</id>
-    <version>1.1.1</version>
+    <version>1.2.0</version>
     <title>Ixoxo.Nhib</title>
     <authors>Nic Bell</authors>
     <projectUrl>https://github.com/nicbell/IxoxoNHibernate</projectUrl>
@@ -13,7 +13,7 @@
     <language>en-GB</language>
     <tags>NHiberate Session</tags>
     <dependencies>
-      <dependency id="FluentNHibernate" version="[1.3.0.733,3)" />
+      <dependency id="FluentNHibernate" version="[1.2.0.712,3)" />
       <dependency id="NHibernate.Caches.SysCache2" version="[3.2.0.4000,5)" />
       <dependency id="Ixoxo.Domain" version="[1.0.0,2)" />
     </dependencies>
