@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ixoxo.Domain", "Ixoxo.Domain\Ixoxo.Domain.csproj", "{96B6B704-E80B-4862-829B-917CC6CB0C1D}"
 EndProject
@@ -12,6 +12,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{791B5D
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{9BEF91BB-7AE7-42F0-A1C3-41E02A439AC5}"
+	ProjectSection(SolutionItems) = preProject
+		Ixoxo.Domain\Ixoxo.Domain.nuspec = Ixoxo.Domain\Ixoxo.Domain.nuspec
+		Ixoxo.Nhib\Ixoxo.Nhib.nuspec = Ixoxo.Nhib\Ixoxo.Nhib.nuspec
 	EndProjectSection
 EndProject
 Global

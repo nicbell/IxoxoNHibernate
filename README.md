@@ -13,7 +13,6 @@ To be used with your NHibernate implementation.
 * NHibernate Session Manager with SysCache.
 * NHibernate domain repository implementation.
 * Base fluent NHibernate mapping.
-* NHibernate web session module.
 
 ## Available to on Nuget
 ```

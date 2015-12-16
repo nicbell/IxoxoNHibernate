@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Ixoxo.Domain</id>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <title>Ixoxo.Domain</title>
     <authors>Nic Bell</authors>
     <projectUrl>https://github.com/nicbell/IxoxoNHibernate</projectUrl>
