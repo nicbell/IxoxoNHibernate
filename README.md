@@ -24,7 +24,7 @@ PM> Install-Package Ixoxo.Nhib
 
 ## Usage
 Before you get started you will need to configure the session manager.
-```cs
+```csharp
 NHibernateSessionManager.configure(Fluently.Configure()
     .Database(MsSqlConfiguration.MsSql2008
 #if DEBUG
