@@ -23,7 +23,7 @@ PM> Install-Package Ixoxo.Nhib
 ```
 
 ## Usage
-Before you get started you will need to configure the session manager.
+Before you get started you will need to configure the session manager. You will usually do this in your HttpApplication start or init.
 ```csharp
 NHibernateSessionManager.configure(Fluently.Configure()
     .Database(MsSqlConfiguration.MsSql2008
